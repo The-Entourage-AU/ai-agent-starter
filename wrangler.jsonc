@@ -1,0 +1,42 @@
+{
+  // ─────────────────────────────────────────────────────────────
+  // Cloudflare Worker configuration — AI AGENT starter.
+  // Rename "ai-agent" to your app's name (Claude can do this for you).
+  // ─────────────────────────────────────────────────────────────
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "ai-agent",
+  "main": "src/index.js",
+  "compatibility_date": "2026-09-23",
+  // nodejs_compat is REQUIRED — the OpenAI SDK relies on Node built-ins.
+  "compatibility_flags": ["nodejs_compat"],
+
+  // Logs & metrics for this Worker (viewable in the Cloudflare dashboard).
+  "observability": {
+    "enabled": true
+  },
+
+  // ─────────────────────────────────────────────────────────────
+  // MODEL — which AI model the agent uses, via OpenRouter (NOT a secret).
+  // "openrouter/auto" auto-picks a capable, tool-supporting model. Set a specific
+  // slug to fit the job — see CLAUDE.md Section 7. Safe to commit.
+  // ─────────────────────────────────────────────────────────────
+  "vars": {
+    "MODEL": "openrouter/auto"
+  }
+
+  // ─────────────────────────────────────────────────────────────
+  // SECRET — OPENROUTER_API_KEY. Never set here, never committed. Set it in
+  // Cloudflare:  npx wrangler secret put OPENROUTER_API_KEY
+  // Locally: put it in .dev.vars (git-ignored). See .env.example + CLAUDE.md §9.
+  // ─────────────────────────────────────────────────────────────
+
+  // ─────────────────────────────────────────────────────────────
+  // DATABASE (D1) — OFF by default. Turn on if the agent needs to store or look
+  // up data (see migrations/ and src/tools.js). Create one with:
+  //   npx wrangler d1 create your-db-name
+  // then paste the returned database_id below and uncomment.
+  //
+  // "d1_databases": [
+  //   { "binding": "DB", "database_name": "your-db-name", "database_id": "PASTE_ID_HERE" }
+  // ]
+}

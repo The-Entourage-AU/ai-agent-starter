@@ -1,0 +1,16 @@
+# Dependencies
+node_modules/
+
+# Local secrets — NEVER commit these
+.dev.vars
+.env
+.env.*
+!.env.example
+
+# Wrangler / Cloudflare
+.wrangler/
+dist/
+
+# OS / editor noise
+.DS_Store
+*.log
