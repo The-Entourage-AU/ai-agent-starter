@@ -14,3 +14,6 @@ dist/
 # OS / editor noise
 .DS_Store
 *.log
+
+# Personal Claude Code settings (shared settings in .claude/settings.json are committed)
+.claude/settings.local.json

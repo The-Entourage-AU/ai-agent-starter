@@ -91,4 +91,22 @@ it — it's why dropping this into Claude Code just works.
 
 ---
 
+## 🧠 How Claude remembers this project
+
+| Piece | What it does |
+|---|---|
+| `CLAUDE.md` | Read every session: what the project is, how Claude works, how changes ship |
+| `.claude/rules/` | House rules: how Claude talks to you, how work is split into 🟢🟡🔴 lanes, boundaries, security, testing, clean code, agent rules |
+| `.claude/agents/` | Helpers that search, build, test and check on cheaper, faster models; the main model plans and reviews. Type `@` to call one (e.g. `@researcher`) |
+| `.claude/hooks/` | 🚦 A push guard that blocks a push to the wrong repo, a force push, or a push with failing checks |
+| `docs/` | The project's memory: what's live, how it works, decisions, integrations, how to fix things |
+| `/update-docs` | Type it at the end of a session to save progress into `docs/` |
+
+**Checks:** `npm run build` runs the linter (Biome) and the tests (Vitest) before every push and every deploy.
+**Made your own copy?** Ask Claude to set `EXPECTED_REMOTE` in `.claude/hooks/pre-push-guard.sh` to your repo, so the push guard lets your pushes through.
+
+<sub>Claude structure by [Abdo Samy](https://abdosamy.com) · [Claude Code Setup Kit](https://github.com/a-samy-consultancy/claude-code-setup-kit)</sub>
+
+---
+
 *Questions about the starter itself: Abdo Samy, The Entourage.*
