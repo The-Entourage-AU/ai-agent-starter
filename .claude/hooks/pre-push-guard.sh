@@ -33,16 +33,19 @@ grep -qE -- '(--force|[[:space:]]-f([[:space:]]|$)|[[:space:]]\+[^[:space:]])' <
 [[ "$EXPECTED_REMOTE" == "{{SET_AT_SETUP}}" || -z "$EXPECTED_REMOTE" ]] && block "EXPECTED_REMOTE isn't set in .claude/hooks/pre-push-guard.sh. Set it to this repo's origin, then push."
 remote=$(git -C "$repo" remote get-url origin 2>/dev/null)
 # shellcheck disable=SC2053  # glob match on purpose
+shopt -s nocasematch  # GitHub owner/repo names are case-insensitive
 [[ "$remote" == $EXPECTED_REMOTE ]] || block "origin is '$remote', not '$EXPECTED_REMOTE'. Tell the owner."
 
 cd "$repo" || block "can't open $repo"
+# Packages missing (fresh clone)? Install them instead of failing the check.
+[[ -f package.json && ! -d node_modules ]] && npm install --no-audit --no-fund --loglevel=error >/dev/null 2>&1
 if [[ -z "$CHECK_CMD" && -f package.json ]]; then
   if jq -e '.scripts.build' package.json >/dev/null 2>&1; then CHECK_CMD="npm run build"
   elif jq -e '.scripts.lint' package.json >/dev/null 2>&1; then CHECK_CMD="npm run lint"; fi
 fi
 [[ -z "$CHECK_CMD" ]] && exit 0
 if ! out=$(bash -c "$CHECK_CMD" 2>&1); then
-  echo "🚦 Push blocked: '$CHECK_CMD' failed in $(basename "$repo"). Fix it, then push again." >&2
+  echo "🚦 Push blocked: '$CHECK_CMD' failed in $(basename "$repo"). Fix it, then push again. If you can't, explain it to the person and, if it needs IT, write a message for Abdo or Fatma (it@the-entourage.com)." >&2
   tail -n 30 <<<"$out" >&2
   exit 2
 fi
